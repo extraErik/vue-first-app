@@ -1,6 +1,6 @@
 {
   "appId": "com.ryggdev.vuememories",
   "appName": "VueMemories",
-  "webDir": "public",
+  "webDir": "dist",
   "bundledWebRuntime": false
 }

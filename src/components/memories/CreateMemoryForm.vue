@@ -6,8 +6,13 @@
                     <ion-input type="text" required v-model="enteredTitle" />
                 </ion-item>
                 <ion-item>
-                    <ion-label position="floating">Image URL</ion-label>
-                    <ion-input type="url" required v-model="enteredImageUrl" />
+                    <ion-thumbnail slot="start">
+                        <img :src="takenImageUrl" />
+                    </ion-thumbnail>
+                    <ion-button type="button" fill="clear" @click="takePhoto">
+                        <ion-icon :icon="camera" slot="start"></ion-icon>
+                        Take Photo
+                    </ion-button>
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Description</ion-label>
@@ -19,7 +24,9 @@
 </template>
 
 <script>
-import { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton } from "@ionic/vue";
+import { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonThumbnail, IonIcon } from "@ionic/vue";
+import { camera } from 'ionicons/icons';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 export default {
     emits: ['save-memory'],
@@ -29,20 +36,33 @@ export default {
         IonLabel,
         IonInput,
         IonTextarea,
-        IonButton
+        IonButton,
+        IonThumbnail,
+        IonIcon
     },
     data() {
         return {
             enteredTitle: '',
-            enteredImageUrl: '',
-            enteredDescription: ''
+            enteredDescription: '',
+            takenImageUrl: null,
+            camera
         }
     },
     methods: {
+        async takePhoto() {
+            console.log(Camera);
+            const photo = await Camera.getPhoto({
+                resultType: CameraResultType.Uri,
+                source: CameraSource.Camera,
+                quality: 60
+            });
+
+            this.takenImageUrl = photo.webPath;
+        },
         submitForm() {
             const memoryData = {
                 title: this.enteredTitle,
-                image: this.enteredImageUrl,
+                image: this.takenImageUrl,
                 description: this.enteredDescription
             };
             this.$emit('save-memory', memoryData);

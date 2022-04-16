@@ -1,0 +1,6 @@
+{
+	"appId": "com.ryggdev.vuememories",
+	"appName": "VueMemories",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
